@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="../../favicon.ico">
+
+<title>Precavido.com | Dashboard</title>
+
+<!-- Custom styles for this template -->
+<link href="/css/dashboard.css" rel="stylesheet">
+<link href="/css/style-db-profile.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a href="/dashboard"><img class="img-logo"
+					src="/assets/logo.png" width="200px" height="50px"></a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/profile">Profile</a></li>
+					<li><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+                    <li class="active"><a>Dashboard</a></li>
+                    <li class=""><a href="/dashboard">Página Inicial</a></li>
+                </ul>
+				<ul class="nav nav-sidebar">
+					<li class="active"><a>Registro de Gastos</a></li>
+					<li class=""><a href="/dashboard/payments">Exibir Gastos</a></li>
+					<li class=""><a href="/dashboard/add">Adicionar Gastos</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<div class="card hovercard">
+					<div class="cardheader"></div>
+					<img class="wallpaper" src="/assets/wallpaper.jpg">
+					<div class="avatar">
+						<div th:if="${user.image} == null">
+							<img alt="" src="/assets/profile.png">
+						</div>
+						<div th:unless="${user.image} == null">
+							<img th:src="|/image/${user.id}|">
+						</div>
+					</div>
+					<div class="info">
+						<div class="title">Bem-vindo, <b><span th:text="${user.name}"></b></span></div>
+						<br></br>
+						<div class="text label label-default">Informações de Cadastro</div>
+						<br></br>
+						
+						<ul class="col-sm-2"></ul>
+						<ul class="list-group col-sm-8">
+						  <li class="list-group-item"><div class="desc"><b>Nome: </b><span th:text="${user.name}"></span></div></li>
+						  <li class="list-group-item"><div class="desc"><b>Sobrenome: </b><span th:text="${user.lastName}"></span></div></li>
+						  <li class="list-group-item"><div class="desc"><b>Data de Nascimento: </b><span th:text="${#dates.format(user.birthday, 'dd/MM/yyyy')}"></span></div></li>
+						  <li class="list-group-item"><div class="desc"><b>Username: </b><span th:text="${user.username}"></span></div></li>
+						  <li class="list-group-item"><div class="desc"><b>E-mail: </b><span th:text="${user.email}"></span></div></li>
+						</ul>
+						
+						<div class="col-sm-12">
+							<a class="btn btn-primary" th:href="@{/profile/edit/{id}(id=${user.id})}">Editar Perfil</a>
+							<a class="btn btn-success" th:href="@{/profile/password/{id}(id=${user.id})}">Alterar Senha</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="../../favicon.ico">
+
+<title>Precavido.com | Dashboard</title>
+
+<!-- Custom styles for this template -->
+<link href="/css/dashboard.css" rel="stylesheet">
+<link href="/css/style-db-profile.css" rel="stylesheet">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+	rel="stylesheet">
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a href="/dashboard"><img class="img-logo"
+					src="/assets/logo.png" width="200px" height="50px"></a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/profile">Profile</a></li>
+					<li><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+                    <li class="active"><a>Dashboard</a></li>
+                    <li class=""><a href="/dashboard">Página Inicial</a></li>
+                </ul>
+				<ul class="nav nav-sidebar">
+					<li class="active"><a>Registro de Gastos</a></li>
+					<li class=""><a href="/dashboard/payments">Exibir Gastos</a></li>
+					<li class=""><a href="/dashboard/add">Adicionar Gastos</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<div class="card hovercard">
+					<div class="cardheader"></div>
+					<img class="wallpaper" src="/assets/wallpaper.jpg">
+					<div class="avatar">
+						<div th:if="${profileDTO.image} == null">
+							<img alt="" src="/assets/profile.png">
+						</div>
+						<div th:if="${profileDTO.image} != null">
+							<img th:src="|/image/${profileDTO.id}|">
+						</div>
+					</div>
+										
+					<div class="info col-sm-4"></div>
+					<div class="info col-sm-4">
+						<form class="form-horizontal" method="post"
+							th:object="${profileDTO}"
+							th:action="@{/profile/edit/{id}(id=${profileDTO.id})}"
+							enctype="multipart/form-data">
+									
+						<a class="label label-default" th:href="@{/profile/delete/image/{id}(id=${profileDTO.id})}"
+							name="deleteImage">Excluir Foto</a>
+						<br></br>
+						<div class="title">Editar Perfil</div>
+						<br></br/>
+						
+							<div class="alert alert-success" style="text-align: center;" role="alert"
+								th:text="${mensagem}" th:if="${!#strings.isEmpty(mensagem)}"></div>
+							<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+								<div th:each="detailedError : ${#fields.detailedErrors()}">
+									<span th:text="${detailedError.message}"></span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="image" class="cols-sm-2 control-label">Imagem</label>
+								<div class="cols-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon"><i
+											class="fa fa-camera fa" aria-hidden="true"></i></span> <input
+											type="file" class="form-control" id="image" name="fileUser" />
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group"
+								th:classappend="${#fields.hasErrors('name')} ? has-error">
+								<label for="name" class="cols-sm-2 control-label">Primeiro
+									Nome</label>
+								<div class="cols-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon"><i
+											class="fa fa-users fa" aria-hidden="true"></i></span> <input
+											type="text" class="form-control" name="name" id="name"
+											placeholder="Primeiro Nome" th:field="*{name}" />
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group"
+								th:classappend="${#fields.hasErrors('lastName')} ? has-error">
+								<label for="lastName" class="cols-sm-2 control-label">Sobrenome</label>
+								<div class="cols-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon"><i
+											class="fa fa-users fa" aria-hidden="true"></i></span> <input
+											type="text" class="form-control" name="lastName"
+											id="lastName" placeholder="Sobrenome" th:field="*{lastName}" />
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group"
+								th:classappend="${#fields.hasErrors('birthday')} ? has-error">
+								<label for="birthday" class="cols-sm-2 control-label">Data
+									de Nascimento</label>
+								<div class="cols-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon"><i
+											class="fa fa-calendar fa" aria-hidden="true"></i></span> <input
+											type="text" class="form-control" name="birthday"
+											id="birthday" placeholder="Data de Nascimento"
+											th:field="*{birthday}" />
+									</div>
+								</div>
+							</div>
+							<br></br>
+							<div class="info">
+								<a class="btn btn-danger" th:href="@{/profile}">Voltar</a>
+								<button class="btn btn-success" type="submit">Salvar</button>
+							</div>
+							
+							<a type="button" class="label label-default" div-toggle="modal" data-target="modalDelete" 
+								th:onclick="'javascript:deleta(\'' + ${profileDTO.id} + '\')'">
+								Excluir Conta</a>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	<div class="modal" tabindex="-1" role="dialog" id="modalDelete">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Atenção:</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Você realmente deseja excluir sua conta?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-success" id="buttonDelete" >Excluir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+		function deleta(id){
+			$('#modalDelete').modal('show');
+			document.querySelector('#buttonDelete').addEventListener('click', function(){
+				$('#modalDelete').modal('hide');
+
+				var xhttp = new XMLHttpRequest();				
+				xhttp.open("GET", `/profile/user/${id}`, true);				
+				xhttp.send();
+				window.location.replace('/logout');
+			});
+		}
+	</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js" integrity="sha384-jspctxrQmizRroXAKjoWWOOhkG3aZesspL7dmISSX5+p1LfXftbGQocYmzOsv9wx" crossorigin="anonymous"></script>
+</html>

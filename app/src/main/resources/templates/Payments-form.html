@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Precavido.com | Dashboard</title>
+
+<!-- Custom styles for this template -->
+<link href="/css/dashboard.css" rel="stylesheet">
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+<!-- Google Fonts -->
+<link href='https://fonts.googleapis.com/css?family=Passion+One'
+	rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oxygen'
+	rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a href="/dashboard"><img class="img-logo" src="/assets/logo.png" width="200px" height="50px"></a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a th:href="@{/profile}">Profile</a></li>
+					<li><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+                    <li class="active"><a>Dashboard</a></li>
+                    <li class=""><a href="/dashboard">Página Inicial</a></li>
+                </ul>
+				<ul class="nav nav-sidebar">
+					<li class="active"><a>Registro de Gastos</a></li>
+					<li class=""><a href="/dashboard/payments">Exibir Gastos</a></li>
+					<li class=""><a href="/dashboard/add">Adicionar Gastos</a></li>
+				</ul>
+			</div>
+
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<h2 class="sub-header">Adicionar Gastos</h2>
+				<form class="form-horizontal col-sm-12" method="POST" action="#"
+					th:action="@{/dashboard/add}" th:object="${paymentsDTO}">
+					
+					<input type="hidden" th:field="*{id}" />
+					
+					<div class="alert alert-success" style="text-align: center;" role="alert"
+							th:text="${mensagem}" th:if="${!#strings.isEmpty(mensagem)}"></div>
+						
+					<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+						<div th:each="detailedError : ${#fields.detailedErrors()}">
+							<span th:text="${detailedError.message}"></span>
+						</div>
+					</div>
+
+					<div class="form-group" th:classappend="${#fields.hasErrors('description')} ? has-error">
+						<label for="description" class="cols-sm-2 control-label">Descrição</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i
+									class="fa-pencil-square-o fa fa" aria-hidden="true"></i></span> <input
+									type="text" class="form-control" name="description" id="description"
+									th:field="*{description}"
+									placeholder="Entre com a descrição do pagamento" />
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" th:classappend="${#fields.hasErrors('dueDate')} ? has-error">
+						<label for="date" class="cols-sm-2 control-label">Data de
+							Vencimento</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i
+									class="fa-calendar-plus-o fa fa" aria-hidden="true"></i></span> <input
+									type="text" class="form-control" name="dueDate" id="dueDate"
+									th:field="*{dueDate}"
+									placeholder="Entre com a data de vencimento" />
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" th:classappend="${#fields.hasErrors('amount')} ? has-error">
+						<label for="username" class="cols-sm-2 control-label">Valor
+							R$:</label>
+						<div class="cols-sm-2">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa-money fa fa"
+									aria-hidden="true"></i></span> <input type="text" class="form-control"
+									name="amount" id="amount" th:field="*{amount}"
+									placeholder="Entre com o valor" />
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group" th:classappend="${#fields.hasErrors('charge')} ? has-error">
+						<label for="type" class="cols-sm-2 control-label">Forma de Cobrança</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i
+									class="fa-barcode fa" aria-hidden="true"></i></span> 
+									<select	class="form-control" name="charge" id="charge"
+										th:field="*{charge}">
+										<option value="DINHEIRO">Dinheiro</option>
+										<option value="CHEQUE">Cheque</option>
+										<option value="DÉBITO_AUTOMÁTICO">Débito Automático</option>
+										<option value="CARTÃO_DE_CRÉDITO">Cartão de Crédito</option>
+										<option value="BOLETO_BANCÁRIO">Boleto Bancário</option>
+										<option value="TRANSFERÊNCIA_BANCÁRIA">Transferência Bancária</option>
+									</select>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group" th:classappend="${#fields.hasErrors('payment')} ? has-error">
+						<label for="type" class="cols-sm-2 control-label">Forma de Pagamento</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i
+									class="fa-credit-card fa" aria-hidden="true"></i></span> 
+									<select	type="text" class="form-control" name="payment" id="payment"
+										th:field="*{payment}">
+										<option value="VISTA">A Vista</option>
+										<option value="PRAZO">A Prazo</option>
+									</select>
+							</div>
+						</div>
+					</div>
+					
+
+					<div class="form-group" th:classappend="${#fields.hasErrors('pendency')} ? has-error">
+						<label for="type" class="cols-sm-2 control-label">Tipo de
+							Pendência</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i
+									class="fa-check-square-o fa" aria-hidden="true"></i></span> 
+									<select	type="text" class="form-control" name="pendency" id="pendency"
+										th:field="*{pendency}">
+										<option value="FIXO">Fixo</option>
+										<option value="VARIÁVEL">Variável</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group ">
+						<button type="submit" name="adicionar" value="adicionar"
+							class="btn btn-primary btn-lg btn-block login-button">Adicionar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

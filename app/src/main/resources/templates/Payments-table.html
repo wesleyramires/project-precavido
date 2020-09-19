@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-dT8WZNLW+WmnMquYY8GD+px5+PPMy/Rz1pZTBuLQv7EfAZG0xhipTd08JFVCf8bp"
+	crossorigin="anonymous">
+	
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Precavido.com | Dashboard</title>
+
+<!-- Custom styles for this template -->
+<link rel="stylesheet" type="text/css" href="/css/dashboard.css">
+<link rel="stylesheet" type="text/css" href="/css/style-db-table.css">
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a href="/dashboard"><img class="img-logo"
+					src="/assets/logo.png" width="200px" height="50px"></a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a th:href="@{/profile}">Profile</a></li>
+					<li><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3 col-md-2 sidebar">
+				<ul class="nav nav-sidebar">
+                    <li class="active"><a>Dashboard</a></li>
+                    <li class=""><a href="/dashboard">Página Inicial</a></li>
+                </ul>
+				<ul class="nav nav-sidebar">
+					<li class="active"><a>Registro de Gastos</a></li>
+					<li class=""><a href="/dashboard/payments">Exibir Gastos</a></li>
+					<li class=""><a href="/dashboard/add">Adicionar Gastos</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+				<h2 class="sub-header">Registro de Gastos</h2>
+				<form class="form" action="/dashboard/payments" method="post"
+					style="margin-left: -13px">
+					<div class="form-group col-sm-6">
+						<select class="form-control" name="month">
+							<option value="" disabled selected>Selecione o Mês</option>
+							<option value="1">Janeiro</option>
+							<option value="2">Fevereiro</option>
+							<option value="3">Março</option>
+							<option value="4">Abril</option>
+							<option value="5">Maio</option>
+							<option value="6">Junho</option>
+							<option value="7">Julho</option>
+							<option value="8">Agosto</option>
+							<option value="9">Setembro</option>
+							<option value="10">Outubro</option>
+							<option value="11">Novembro</option>
+							<option value="12">Dezembro</option>
+						</select>
+					</div>
+					<div class="form-group col-sm-5">
+						<select class="form-control" name="year">
+							<option value="" disabled selected>Selecione o Ano</option>
+							<option value="2020">2020</option>
+							<option value="2019">2019</option>
+							<option value="2018">2018</option>
+							<option value="2017">2017</option>
+							<option value="2016">2016</option>
+							<option value="2015">2015</option>
+						</select>
+					</div>
+					<div class="form-group col-sm-1">
+						<button type="submit" class="btn btn-success">
+							<i class="fa fa-search" aria-hidden="true"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+				<div class="table-responsive">
+					<table id="table" class="table table-hover">
+						<thead>
+							<tr>
+								<th class="col-sm-3" scope="col">Descrição</th>
+								<th class="text-center" scope="col">Vencimento</th>
+								<th class="text-center" scope="col">Valor</th>
+								<th class="text-center" scope="col">Tipo de Cobrança</th>
+								<th class="text-center" scope="col">Forma de Pagamento</th>
+								<th class="text-center" scope="col">Pendência</th>
+								<th class="text-center" scope="col">Opções</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="payment : ${payments}">
+								<td th:text="${payment.description}"></td>
+								<td class="text-center" th:text="${{payment.dueDate}}"></td>
+								<td class="text-center"
+									th:text="${#numbers.formatCurrency(payment.amount)}"></td>
+								<td class="text-center"><span class=""
+									th:text="${payment.charge.charge}"></span></td>
+								<td class="text-center"><span class=""
+									th:text="${payment.payment.payment}"></span></td>
+								<td class="text-center"><span class="label label-primary"
+									th:text="${payment.pendency.pendency}"></span></td>
+								<td class="text-center">
+									<a class="btn btn-default btn-xs" th:href="@{/dashboard/payment/edit/{id}(id=${payment.id})}">
+										<i class="fa-pencil fa"></i></a>
+									<button class="btn btn-default btn-xs" div-toggle="modal"
+										data-target="modalDelete"
+										th:onclick="'javascript:deleta(\'' + ${payment.id} + '\')'">
+										<i class="fa-trash fa"></i></button>
+								</td>
+							<tr>
+								<td colspan="6" th:if="${#lists.isEmpty(payments)}">Nenhum
+									dado foi encontrado!</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" tabindex="-1" role="dialog" id="modalDelete">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Atenção:</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Você realmente deseja excluir esse dado?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-success" id="btn-delete-title">Excluir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+
+<script type="text/javascript" src="/js/table.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"
+	integrity="sha384-jspctxrQmizRroXAKjoWWOOhkG3aZesspL7dmISSX5+p1LfXftbGQocYmzOsv9wx"
+	crossorigin="anonymous"></script>
+</html>

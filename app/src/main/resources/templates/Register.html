@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Precavido.com - Cadastro</title>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+
+
+<!-- Website Font style -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+<!-- Google Fonts -->
+<link href='https://fonts.googleapis.com/css?family=Passion+One'
+	rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oxygen'
+	rel='stylesheet' type='text/css'>
+</head>
+
+<main>
+
+	<div class="container">
+		<div class="row main">
+			<div class="panel-heading">
+				<div class="panel-title text-center">
+					<img src="/assets/logo.png">
+					<hr />
+				</div>
+			</div>
+			<div class="main-login main-center">
+				<form class="form-horizontal" method="post" th:action="@{/cadastro}" th:object="${userDTO}">
+
+					<div class="alert alert-success" role="alert" th:text="${mensagem}" 
+						th:if="${!#strings.isEmpty(mensagem)}"></div>
+						
+					<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+						<div th:each="detailedError : ${#fields.detailedErrors()}">
+							<span th:text="${detailedError.message}"></span>
+						</div>
+					</div>
+
+					<div class="text-center">
+						<h1 class="title">Cadastre-se</h1>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? has-error">
+						<label for="nome" class="cols-sm-2 control-label">Seu Nome</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-user fa"
+									aria-hidden="true"></i></span> <input type="text" class="form-control"
+									name="name" id="name" th:field="*{name}"
+									placeholder="Entre com seu Nome Completo" />
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group" th:classappend="${#fields.hasErrors('lastName')} ? has-error">
+						<label for="nome" class="cols-sm-2 control-label">Seu Sobrenome</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-user fa"
+									aria-hidden="true"></i></span> <input type="text" class="form-control"
+									name="lastName" id="lastName" th:field="*{lastName}"
+									placeholder="Entre com seu Sobrenome" />
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group" th:classappend="${#fields.hasErrors('birthday')} ? has-error">
+						<label for="nome" class="cols-sm-2 control-label">Sua Data de Nascimento</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-calendar fa"
+									aria-hidden="true"></i></span> <input type="text" class="form-control"
+									name="birthday" id="birthday" th:field="*{birthday}"
+									placeholder="Entre com sua Data de Nascimento" />
+							</div>
+						</div>
+					</div>
+
+
+					<div class="form-group" th:classappend="${#fields.hasErrors('email')} ? has-error">
+						<label for="email" class="cols-sm-2 control-label">Seu
+							Email</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i
+									class="fa fa-envelope fa" aria-hidden="true"></i></span> <input
+									type="text" class="form-control" name="email" id="email"
+									th:field="*{email}" placeholder="Entre com seu Email" />
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" th:classappend="${#fields.hasErrors('username')} ? has-error">
+						<label for="username" class="cols-sm-2 control-label">Nome
+							de Usuário</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-users fa"
+									aria-hidden="true"></i></span> <input type="text" class="form-control"
+									name="username" id="username" th:field="*{username}"
+									placeholder="Entre com seu Nome de Usuário" />
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" th:classappend="${#fields.hasErrors('password')} ? has-error">
+						<label for="password" class="cols-sm-2 control-label">Senha</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i
+									class="fa fa-lock fa-lg" aria-hidden="true"></i></span> <input
+									type="password" class="form-control" name="password"
+									id="password" th:field="*{password}"
+									placeholder="Entre com a sua Senha" />
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" th:classappend="${#fields.hasErrors('confirmPassword')} ? has-error">
+						<label for="confirm" class="cols-sm-2 control-label">Confirmar
+							Senha</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i
+									class="fa fa-lock fa-lg" aria-hidden="true"></i></span> <input
+									type="password" class="form-control" name="confirmPassword"
+									id="confirmPassword" th:field="*{confirmPassword}"
+									placeholder="Confirme sua Senha" />
+							</div>
+						</div>
+					</div>
+
+
+					<div class="form-group ">
+						<button type="submit" name="cadastrar" value="cadastrar"
+							class="btn btn-primary btn-lg btn-block login-button">Cadastrar</button>
+					</div>
+					<div class="login-register">
+						<a href="/login">Login</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="assets/js/bootstrap.js"></script>
+
+</main>
+</html>
